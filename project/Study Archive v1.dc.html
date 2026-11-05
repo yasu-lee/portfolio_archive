@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Antonio:wght@600;700&family=Noto+Serif+KR:wght@300;400;600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+KR:wght@400;500&display=swap" rel="stylesheet">
+<style>body{margin:0;background:#FDFAF7;color:#141414;-webkit-font-smoothing:antialiased}*{box-sizing:border-box}a{color:inherit;text-decoration:underline;text-underline-offset:3px}a:hover{color:#1E4BD7}::selection{background:#FFE927;color:#141414}input::placeholder{color:rgba(20,20,20,.45)}</style>
+</helmet>
+<div style="min-height:100vh;font-family:'Noto Serif KR',serif;">
+
+<header style="position:sticky;top:0;z-index:20;background:#FDFAF7;border-bottom:1px solid #141414;display:flex;flex-wrap:wrap;align-items:center;gap:12px 24px;padding:12px clamp(16px,3vw,40px);font-family:'IBM Plex Mono','IBM Plex Sans KR',monospace;font-size:13px;">
+  <a href="#top" style="white-space:nowrap;text-decoration:none;font-weight:500;letter-spacing:.04em;">STUDY FILES ®</a>
+  <nav style="display:flex;gap:18px;flex-wrap:wrap;">
+    <a href="#notes" style="text-decoration:none;" style-hover="color:#1E4BD7">Notes</a>
+    <a href="#dialogues" style="text-decoration:none;" style-hover="color:#D71E1E">Dialogues</a>
+    <a href="#skills" style="text-decoration:none;" style-hover="color:#581E70">Skills</a>
+    <a href="#colophon" style="text-decoration:none;" style-hover="color:#581E70">About</a>
+  </nav>
+  <div style="flex:1 1 240px;display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap;align-items:center;">
+    <div style="display:flex;border:1px solid #141414;">
+      <sc-for list="{{ fmtChips }}" as="c" hint-placeholder-count="3">
+        <button onClick="{{ c.onClick }}" style="font:inherit;font-size:12px;padding:5px 10px;border:0;cursor:pointer;background:{{ c.bg }};color:{{ c.fg }};">{{ c.label }}</button>
+      </sc-for>
+    </div>
+    <button onClick="{{ toggleLayout }}" style="white-space:nowrap;font:inherit;font-size:12px;padding:6px 10px;border:1px solid #141414;background:transparent;cursor:pointer;" style-hover="background:#141414;color:#FDFAF7">{{ layoutLabel }}</button>
+    <label style="display:flex;align-items:center;gap:8px;border:1px solid #141414;padding:5px 10px;min-width:200px;">
+      <span>⌕</span>
+      <input ref="{{ searchRef }}" value="{{ query }}" onChange="{{ onQuery }}" placeholder="검색  ( / )" style="border:0;outline:0;background:transparent;font:inherit;font-size:13px;width:100%;color:#141414;">
+    </label>
+  </div>
+</header>
+
+<section id="top" style="padding:clamp(28px,5vw,64px) clamp(16px,3vw,40px) 0;">
+  <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:13px;text-transform:uppercase;letter-spacing:.06em;">
+    <span style="white-space:nowrap;">Personal research archive</span><span style="white-space:nowrap;">Vol. 01 — 2026</span>
+  </div>
+  <h1 style="margin:clamp(8px,2vw,20px) 0 0;font-family:'Antonio',sans-serif;font-weight:700;font-size:clamp(88px,25vw,440px);line-height:.82;letter-spacing:-.01em;text-transform:uppercase;">Archive</h1>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:24px 48px;padding:clamp(24px,4vw,48px) 0;border-bottom:1px solid #141414;">
+    <p style="margin:0;font-size:clamp(22px,2.4vw,30px);line-height:1.35;font-weight:300;text-wrap:pretty;">지속적으로 공부하고, 궁금해 했던 것들을 저장하는 개인 아카이브.</p>
+    <p style="margin:0;font-size:17px;line-height:1.7;font-weight:300;text-wrap:pretty;max-width:560px;">유튜브와 외부 자료를 따라 정리한 노트, AI 에이전트와 묻고 답하며 다듬은 대화, 그리고 반복해서 꺼내 쓰는 스킬까지. 모든 기록은 에이전트가 HTML·PPT로 시각화해 한 곳에 보관합니다.</p>
+  </div>
+</section>
+
+<section style="padding:0 clamp(16px,3vw,40px) clamp(40px,6vw,96px);">
+  <sc-for list="{{ index }}" as="r" hint-placeholder-count="3">
+    <a href="{{ r.href }}" style="display:grid;grid-template-columns:72px minmax(0,1fr) auto;align-items:center;gap:16px;padding:18px 12px;border-bottom:1px solid #141414;text-decoration:none;transition:background .25s,color .25s;" style-hover="background:{{ r.color }};color:{{ r.fg }}">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:13px;">{{ r.no }}</span>
+      <span style="display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 24px;">
+        <span style="font-family:'Antonio',sans-serif;font-weight:700;font-size:clamp(40px,6vw,88px);line-height:.95;text-transform:uppercase;">{{ r.name }}</span>
+        <span style="font-size:17px;font-weight:300;">{{ r.ko }}</span>
+      </span>
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:13px;">{{ r.count }} files →</span>
+    </a>
+  </sc-for>
+</section>
+
+<section id="notes" style="background:#1E4BD7;color:#FDFAF7;padding:clamp(40px,6vw,96px) clamp(16px,3vw,40px);scroll-margin-top:50px;">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:24px 48px;align-items:end;padding-bottom:32px;border-bottom:1px solid #FDFAF7;">
+    <div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.06em;">01 / FOLLOW-ALONG NOTES</div>
+      <h2 style="margin:12px 0 0;font-family:'Antonio',sans-serif;font-weight:700;font-size:clamp(72px,13vw,220px);line-height:.85;text-transform:uppercase;">Notes</h2>
+    </div>
+    <p style="margin:0;font-size:clamp(18px,1.8vw,22px);line-height:1.55;font-weight:300;text-wrap:pretty;">유튜브 강의, 아티클, 공식 문서를 따라 하며 정리한 기록. 에이전트가 핵심을 추려 HTML 리포트나 PPT 슬라이드로 다시 만들어, 나중에 한 장으로 꺼내 볼 수 있게 합니다.</p>
+  </div>
+  <div style="display:grid;grid-template-columns:{{ gridCols }};gap:1px;background:rgba(253,250,247,.5);border:1px solid rgba(253,250,247,.5);margin-top:32px;">
+    <sc-for list="{{ notes }}" as="e" hint-placeholder-count="4">
+      <article onClick="{{ e.onOpen }}" style="background:#1E4BD7;padding:20px;cursor:pointer;display:flex;flex-direction:column;gap:14px;transition:background .2s,color .2s;" style-hover="background:#FDFAF7;color:#1E4BD7">
+        <sc-if value="{{ showThumbs }}" hint-placeholder-val="{{ true }}">
+          <div style="aspect-ratio:16/10;background:repeating-linear-gradient(135deg,rgba(253,250,247,.14) 0 1px,transparent 1px 9px);border:1px solid rgba(253,250,247,.45);display:flex;align-items:flex-end;padding:10px;font-family:'IBM Plex Mono',monospace;font-size:11px;opacity:.9;">{{ e.thumb }}</div>
+        </sc-if>
+        <div style="display:flex;justify-content:space-between;gap:12px;font-family:'IBM Plex Mono',monospace;font-size:12px;"><span>{{ e.no }}</span><span>{{ e.fmt }}</span></div>
+        <h3 style="margin:0;font-size:22px;line-height:1.35;font-weight:400;text-wrap:pretty;">{{ e.title }}</h3>
+        <div style="margin-top:auto;display:flex;justify-content:space-between;gap:12px;font-family:'IBM Plex Mono','IBM Plex Sans KR',monospace;font-size:12px;opacity:.85;"><span>{{ e.source }}</span><span>{{ e.date }}</span></div>
+      </article>
+    </sc-for>
+  </div>
+  <sc-if value="{{ notesEmpty }}" hint-placeholder-val="{{ false }}"><p style="font-family:'IBM Plex Mono',monospace;font-size:13px;margin:24px 0 0;">검색 결과가 없습니다.</p></sc-if>
+</section>
+
+<section id="dialogues" style="background:#D71E1E;color:#FDFAF7;padding:clamp(40px,6vw,96px) clamp(16px,3vw,40px);scroll-margin-top:50px;">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:24px 48px;align-items:end;padding-bottom:32px;border-bottom:1px solid #FDFAF7;">
+    <div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.06em;">02 / CONVERSATIONS WITH AGENTS</div>
+      <h2 style="margin:12px 0 0;font-family:'Antonio',sans-serif;font-weight:700;font-size:clamp(72px,13vw,220px);line-height:.85;text-transform:uppercase;">Dialogues</h2>
+    </div>
+    <p style="margin:0;font-size:clamp(18px,1.8vw,22px);line-height:1.55;font-weight:300;text-wrap:pretty;">궁금한 것을 AI 에이전트와 서로 묻고 답하며 정리한 문답. 질문에서 시작해 결론까지의 흐름을 그대로 남기고, 같은 방식으로 HTML·PPT로 시각화합니다.</p>
+  </div>
+  <div style="display:grid;grid-template-columns:{{ gridCols }};gap:1px;background:rgba(253,250,247,.5);border:1px solid rgba(253,250,247,.5);margin-top:32px;">
+    <sc-for list="{{ dialogues }}" as="e" hint-placeholder-count="3">
+      <article onClick="{{ e.onOpen }}" style="background:#D71E1E;padding:20px;cursor:pointer;display:flex;flex-direction:column;gap:14px;transition:background .2s,color .2s;" style-hover="background:#FDFAF7;color:#D71E1E">
+        <div style="display:flex;justify-content:space-between;gap:12px;font-family:'IBM Plex Mono',monospace;font-size:12px;"><span>{{ e.no }}</span><span>{{ e.fmt }}</span></div>
+        <div style="font-family:'Antonio',sans-serif;font-size:56px;line-height:.8;">“</div>
+        <h3 style="margin:0;font-size:24px;line-height:1.35;font-weight:400;text-wrap:pretty;">{{ e.title }}</h3>
+        <p style="margin:0;font-size:15px;line-height:1.6;font-weight:300;opacity:.9;text-wrap:pretty;">{{ e.sub }}</p>
+        <div style="margin-top:auto;display:flex;justify-content:space-between;gap:12px;font-family:'IBM Plex Mono','IBM Plex Sans KR',monospace;font-size:12px;opacity:.85;"><span>{{ e.source }}</span><span>{{ e.date }}</span></div>
+      </article>
+    </sc-for>
+  </div>
+  <sc-if value="{{ dialoguesEmpty }}" hint-placeholder-val="{{ false }}"><p style="font-family:'IBM Plex Mono',monospace;font-size:13px;margin:24px 0 0;">검색 결과가 없습니다.</p></sc-if>
+</section>
+
+<section id="skills" style="background:#FFE927;color:#141414;padding:clamp(40px,6vw,96px) clamp(16px,3vw,40px);scroll-margin-top:50px;">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:24px 48px;align-items:end;padding-bottom:32px;border-bottom:1px solid #141414;">
+    <div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.06em;">03 / REUSABLE SKILLS</div>
+      <h2 style="margin:12px 0 0;font-family:'Antonio',sans-serif;font-weight:700;font-size:clamp(72px,13vw,220px);line-height:.85;text-transform:uppercase;">Skills</h2>
+    </div>
+    <p style="margin:0;font-size:clamp(18px,1.8vw,22px);line-height:1.55;font-weight:300;text-wrap:pretty;">Git과 Notion에 저장해 둔 에이전트 스킬. 정리 방식 자체를 재사용 가능한 도구로 만들어, 필요할 때 경로를 복사해 바로 꺼내 씁니다.</p>
+  </div>
+  <div style="display:{{ skillHeadDisplay }};grid-template-columns:72px minmax(0,1.2fr) minmax(0,2fr) 110px 96px;gap:16px;padding:14px 0;border-bottom:1px solid #141414;font-family:'IBM Plex Mono',monospace;font-size:12px;text-transform:uppercase;letter-spacing:.06em;">
+    <span>No.</span><span>Skill</span><span>Description</span><span>Stored</span><span></span>
+  </div>
+  <sc-for list="{{ skills }}" as="s" hint-placeholder-count="4">
+    <div style="display:grid;grid-template-columns:{{ skillCols }};gap:10px 16px;align-items:center;padding:18px 0;border-bottom:1px solid #141414;">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:13px;">{{ s.no }}</span>
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:16px;font-weight:500;overflow-wrap:anywhere;">{{ s.name }}</span>
+      <span style="font-size:16px;line-height:1.55;font-weight:300;text-wrap:pretty;">{{ s.desc }}</span>
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;border:1px solid #141414;padding:3px 8px;justify-self:start;">{{ s.where }}</span>
+      <button onClick="{{ s.onCopy }}" style="font-family:'IBM Plex Mono','IBM Plex Sans KR',monospace;font-size:12px;padding:8px 10px;border:1px solid #141414;background:{{ s.bg }};color:{{ s.fg }};cursor:pointer;" style-hover="background:#141414;color:#FFE927">{{ s.copyLabel }}</button>
+    </div>
+  </sc-for>
+  <sc-if value="{{ skillsEmpty }}" hint-placeholder-val="{{ false }}"><p style="font-family:'IBM Plex Mono',monospace;font-size:13px;margin:24px 0 0;">검색 결과가 없습니다.</p></sc-if>
+</section>
+
+<section id="colophon" style="background:#581E70;color:#FDFAF7;padding:clamp(40px,6vw,96px) clamp(16px,3vw,40px) 32px;scroll-margin-top:50px;">
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.06em;">04 / HOW THIS ARCHIVE WORKS</div>
+  <h2 style="margin:12px 0 40px;font-family:'Antonio',sans-serif;font-weight:700;font-size:clamp(56px,9vw,150px);line-height:.88;text-transform:uppercase;">Source → File</h2>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));border-top:1px solid #FDFAF7;">
+    <sc-for list="{{ steps }}" as="st" hint-placeholder-count="4">
+      <div style="padding:20px 20px 28px 0;border-bottom:1px solid rgba(253,250,247,.4);display:flex;flex-direction:column;gap:10px;">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:13px;">{{ st.no }}</span>
+        <span style="font-family:'Antonio',sans-serif;font-weight:600;font-size:36px;text-transform:uppercase;line-height:1;">{{ st.en }}</span>
+        <span style="font-size:16px;line-height:1.6;font-weight:300;text-wrap:pretty;">{{ st.ko }}</span>
+      </div>
+    </sc-for>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:24px 48px;margin-top:48px;font-size:17px;line-height:1.7;font-weight:300;">
+    <p style="margin:0;text-wrap:pretty;"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;display:block;margin-bottom:6px;">DOMAIN</span>개인 도메인으로 배포합니다. 카테고리별 경로 — <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;">/notes</span>, <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;">/dialogues</span>, <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;">/skills</span> — 로 나눠 링크 하나로 공유할 수 있게.</p>
+    <p style="margin:0;text-wrap:pretty;"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;display:block;margin-bottom:6px;">ONE FILE PER ENTRY</span>기록 하나당 독립된 HTML 파일 하나. 이 인덱스는 그 파일들을 모아 보여주는 목차 역할만 하므로, 새 기록은 파일을 추가하는 것만으로 쌓입니다.</p>
+  </div>
+  <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-top:72px;padding-top:16px;border-top:1px solid rgba(253,250,247,.4);font-family:'IBM Plex Mono',monospace;font-size:12px;">
+    <span>© 2026 Study Files</span><span>Keep asking. Keep filing.</span>
+  </div>
+</section>
+
+<sc-if value="{{ isOpen }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ close }}" style="position:fixed;inset:0;background:rgba(20,20,20,.45);z-index:40;"></div>
+  <aside style="position:fixed;top:0;right:0;bottom:0;width:min(600px,100%);background:#FDFAF7;z-index:41;overflow-y:auto;display:flex;flex-direction:column;border-left:1px solid #141414;">
+    <div style="background:{{ sel.color }};color:#FDFAF7;padding:20px 28px 28px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;font-family:'IBM Plex Mono',monospace;font-size:13px;">
+        <span>{{ sel.no }} — {{ sel.catName }}</span>
+        <button onClick="{{ close }}" style="font:inherit;background:transparent;border:1px solid #FDFAF7;color:#FDFAF7;padding:4px 10px;cursor:pointer;">닫기 ✕</button>
+      </div>
+      <h3 style="margin:28px 0 0;font-size:clamp(26px,3vw,34px);line-height:1.3;font-weight:400;text-wrap:pretty;">{{ sel.title }}</h3>
+    </div>
+    <div style="padding:28px;display:flex;flex-direction:column;gap:28px;">
+      <div style="display:grid;grid-template-columns:auto 1fr;gap:8px 20px;font-family:'IBM Plex Mono','IBM Plex Sans KR',monospace;font-size:13px;">
+        <span style="opacity:.6;">SOURCE</span><span>{{ sel.source }}</span>
+        <span style="opacity:.6;">DATE</span><span>{{ sel.date }}</span>
+        <span style="opacity:.6;">FORMAT</span><span>{{ sel.fmt }}</span>
+        <span style="opacity:.6;">TAGS</span><span>{{ sel.tagLine }}</span>
+      </div>
+      <p style="margin:0;font-size:18px;line-height:1.7;font-weight:300;text-wrap:pretty;">{{ sel.summary }}</p>
+      <div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.06em;padding-bottom:10px;border-bottom:1px solid #141414;">KEY TAKEAWAYS</div>
+        <sc-for list="{{ sel.pointList }}" as="p" hint-placeholder-count="3">
+          <div style="display:grid;grid-template-columns:36px 1fr;gap:8px;padding:14px 0;border-bottom:1px solid rgba(20,20,20,.2);font-size:16px;line-height:1.6;">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;padding-top:3px;">{{ p.n }}</span><span>{{ p.t }}</span>
+          </div>
+        </sc-for>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <sc-for list="{{ sel.actions }}" as="a" hint-placeholder-count="2">
+          <a href="{{ a.href }}" style="font-family:'IBM Plex Mono',monospace;font-size:13px;text-decoration:none;padding:12px 18px;border:1px solid #141414;background:#141414;color:#FDFAF7;" style-hover="background:#FFE927;color:#141414">{{ a.label }}</a>
+        </sc-for>
+      </div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;opacity:.6;">{{ sel.path }}</div>
+    </div>
+  </aside>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;layout&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;grid&quot;,&quot;list&quot;],&quot;default&quot;:&quot;grid&quot;,&quot;tsType&quot;:&quot;'grid'|'list'&quot;},&quot;showThumbs&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+const CATS = {
+  notes: { name: 'Notes', color: '#1E4BD7' },
+  dialogues: { name: 'Dialogues', color: '#D71E1E' },
+};
+const ENTRIES = [
+  { id: 'n1', cat: 'notes', title: 'Transformer 구조를 한 장으로: Attention부터 Decoder까지', source: 'YouTube · 딥러닝 강의', format: ['HTML', 'PPT'], date: '2026.10.28', tags: ['AI', 'LLM'], thumb: 'slide capture — attention diagram', slug: 'transformer',
+    summary: '1시간 분량의 강의를 따라가며 Self-Attention, Multi-Head, Positional Encoding의 흐름을 정리했다. 수식보다 데이터가 어떻게 이동하는지에 집중.',
+    points: ['Attention은 “어떤 토큰을 얼마나 볼지” 정하는 가중 평균이다.', 'Multi-Head는 서로 다른 관점의 관계를 병렬로 학습한다.', '순서 정보는 Positional Encoding으로 따로 주입된다.'] },
+  { id: 'n2', cat: 'notes', title: 'React Server Components 따라 만들며 이해하기', source: 'Docs · 공식 문서', format: ['HTML'], date: '2026.10.14', tags: ['Frontend'], thumb: 'screenshot — component tree', slug: 'rsc',
+    summary: '공식 문서 예제를 직접 따라 만들며 서버/클라이언트 경계가 어디서 나뉘는지 정리.',
+    points: ['서버 컴포넌트는 번들에 포함되지 않는다.', "'use client'는 경계선 선언이지 파일 단위 옵션이 아니다.", '데이터 패칭을 컴포넌트 가까이에 둘 수 있다.'] },
+  { id: 'n3', cat: 'notes', title: 'Figma Auto Layout 실전 패턴 12가지', source: 'YouTube · 디자인 튜토리얼', format: ['PPT'], date: '2026.09.30', tags: ['Design'], thumb: 'slide capture — layout patterns', slug: 'auto-layout',
+    summary: '튜토리얼을 따라 하며 자주 쓰는 레이아웃 패턴을 슬라이드 12장으로 압축.',
+    points: ['Hug / Fill / Fixed 세 가지만 이해하면 대부분 해결된다.', '중첩 프레임은 3단계 이하로 유지.', '간격은 gap으로, padding은 컨테이너에만.'] },
+  { id: 'n4', cat: 'notes', title: 'DCF 밸류에이션 기초: 엑셀 없이 개념부터', source: 'Article · 투자 블로그', format: ['HTML', 'PPT'], date: '2026.09.12', tags: ['Finance'], thumb: 'chart — cash flow timeline', slug: 'dcf',
+    summary: '아티클 시리즈를 따라 현금흐름 할인 모델의 핵심 가정을 정리.',
+    points: ['가치는 미래 현금흐름의 현재가치 합이다.', '할인율과 영구성장률 가정이 결과를 좌우한다.', '민감도 표로 가정의 위험을 같이 본다.'] },
+  { id: 'd1', cat: 'dialogues', title: 'RAG와 Fine-tuning, 언제 무엇을 써야 할까?', sub: '“내 문서로 답하게 하려면?”이라는 질문에서 시작해 비용·정확도·업데이트 주기로 비교.', source: 'with Claude', format: ['HTML'], date: '2026.11.02', tags: ['AI'], slug: 'rag-vs-ft',
+    summary: '세 번의 왕복 질문 끝에 “지식은 RAG, 말투와 형식은 Fine-tuning”이라는 기준으로 정리.',
+    points: ['자주 바뀌는 지식은 검색으로 붙인다.', '출력 형식·톤 고정은 Fine-tuning이 유리.', '대부분은 프롬프트 + RAG로 충분하다.'] },
+  { id: 'd2', cat: 'dialogues', title: 'MCP는 왜 필요해졌을까?', sub: '에이전트가 외부 도구와 연결되는 방식을 USB 비유로 묻고 답한 기록.', source: 'with Claude', format: ['HTML', 'PPT'], date: '2026.10.20', tags: ['AI', 'Agent'], slug: 'mcp',
+    summary: '도구마다 다른 연결 방식을 하나의 프로토콜로 표준화한다는 흐름으로 이해.',
+    points: ['도구 제공자와 에이전트 사이의 공통 언어.', '한 번 만든 서버를 여러 클라이언트가 재사용.', '권한과 범위를 명시적으로 다룬다.'] },
+  { id: 'd3', cat: 'dialogues', title: '좋은 질문은 어떤 구조를 가질까?', sub: '프롬프트를 잘 쓰는 법이 아니라, 무엇을 모르는지 정확히 말하는 법에 대한 대화.', source: 'with Claude', format: ['PPT'], date: '2026.10.05', tags: ['Thinking'], slug: 'good-question',
+    summary: '맥락 → 목표 → 제약 → 원하는 형식 순서로 질문하면 답의 질이 달라진다는 결론.',
+    points: ['내가 이미 아는 것을 먼저 말한다.', '“좋은 답”의 기준을 질문에 포함한다.', '답을 받은 뒤 반론을 요청한다.'] },
+];
+const SKILLS = [
+  { id: 's1', name: 'youtube-summarizer', desc: '영상 링크를 받아 타임라인별 핵심과 요약 노트를 생성', where: 'Git', path: 'github.com/me/skills/youtube-summarizer' },
+  { id: 's2', name: 'html-report', desc: '정리된 노트를 단일 HTML 리포트로 시각화 (이 아카이브 양식)', where: 'Git', path: 'github.com/me/skills/html-report' },
+  { id: 's3', name: 'pptx-builder', desc: '핵심 내용을 10장 내외의 PPT 슬라이드로 변환', where: 'Git', path: 'github.com/me/skills/pptx-builder' },
+  { id: 's4', name: 'dialogue-to-note', desc: '에이전트와의 문답 기록을 질문 → 결론 구조로 재정리', where: 'Notion', path: 'notion.so/me/skills/dialogue-to-note' },
+];
+const STEPS = [
+  { no: '01', en: 'Source', ko: '유튜브, 아티클, 문서 — 또는 에이전트에게 던진 질문 하나.' },
+  { no: '02', en: 'Agent', ko: '에이전트가 따라 정리하거나, 문답을 주고받으며 핵심을 추린다.' },
+  { no: '03', en: 'Visualize', ko: '저장된 스킬로 HTML 리포트 또는 PPT 슬라이드를 만든다.' },
+  { no: '04', en: 'File', ko: '개인 도메인에 개별 HTML로 올리고, 이 인덱스에 등록한다.' },
+];
+
+class Component extends DCLogic {
+  state = { query: '', format: 'All', openId: null, copied: null, layout: null, narrow: typeof window !== 'undefined' && window.innerWidth < 640 };
+  searchRef = React.createRef();
+  componentDidMount() {
+    this.onKey = (e) => {
+      if (e.key === 'Escape') this.setState({ openId: null });
+      if (e.key === '/' && document.activeElement !== this.searchRef.current) { e.preventDefault(); this.searchRef.current?.focus(); }
+    };
+    window.addEventListener('keydown', this.onKey);
+    this.onResize = () => { const n = window.innerWidth < 640; if (n !== this.state.narrow) this.setState({ narrow: n }); };
+    window.addEventListener('resize', this.onResize);
+  }
+  componentWillUnmount() { window.removeEventListener('keydown', this.onKey); window.removeEventListener('resize', this.onResize); }
+  match(e) {
+    const q = this.state.query.trim().toLowerCase();
+    const f = this.state.format;
+    if (f !== 'All' && !e.format.includes(f)) return false;
+    if (!q) return true;
+    return [e.title, e.sub, e.source, ...(e.tags || [])].join(' ').toLowerCase().includes(q);
+  }
+  renderVals() {
+    const { query, format, openId, copied } = this.state;
+    const layout = this.state.layout ?? this.props.layout ?? 'grid';
+    const decorate = (list, prefix) => list.map((e, i) => ({ ...e, no: `${prefix}—${String(i + 1).padStart(2, '0')}`, fmt: e.format.join(' · '), onOpen: () => this.setState({ openId: e.id }) }));
+    const notesAll = decorate(ENTRIES.filter(e => e.cat === 'notes'), 'N');
+    const dlgAll = decorate(ENTRIES.filter(e => e.cat === 'dialogues'), 'D');
+    const notes = notesAll.filter(e => this.match(e));
+    const dialogues = dlgAll.filter(e => this.match(e));
+    const q = query.trim().toLowerCase();
+    const skills = SKILLS.filter(s => !q || (s.name + s.desc + s.where).toLowerCase().includes(q)).map((s, i) => ({
+      ...s, no: `S—${String(i + 1).padStart(2, '0')}`,
+      copyLabel: copied === s.id ? '복사됨 ✓' : '경로 복사',
+      bg: copied === s.id ? '#141414' : 'transparent', fg: copied === s.id ? '#FFE927' : '#141414',
+      onCopy: () => { navigator.clipboard?.writeText(s.path).catch(() => {}); this.setState({ copied: s.id }); clearTimeout(this.t); this.t = setTimeout(() => this.setState({ copied: null }), 1600); },
+    }));
+    const selRaw = [...notesAll, ...dlgAll].find(e => e.id === openId);
+    const sel = selRaw ? {
+      ...selRaw, color: CATS[selRaw.cat].color, catName: CATS[selRaw.cat].name, tagLine: selRaw.tags.join(', '),
+      pointList: selRaw.points.map((t, i) => ({ n: String(i + 1).padStart(2, '0'), t })),
+      actions: selRaw.format.map(f => ({ label: f === 'HTML' ? 'HTML로 열기 ↗' : 'PPT 다운로드 ↓', href: `#${selRaw.slug}-${f.toLowerCase()}` })),
+      path: `/${selRaw.cat}/${selRaw.slug}.html`,
+    } : {};
+    return {
+      query, searchRef: this.searchRef,
+      onQuery: (e) => this.setState({ query: e.target.value }),
+      fmtChips: ['All', 'HTML', 'PPT'].map(l => ({ label: l, bg: format === l ? '#141414' : 'transparent', fg: format === l ? '#FDFAF7' : '#141414', onClick: () => this.setState({ format: l }) })),
+      layoutLabel: layout === 'grid' ? '▦ Grid' : '☰ List',
+      toggleLayout: () => this.setState({ layout: layout === 'grid' ? 'list' : 'grid' }),
+      gridCols: layout === 'grid' ? 'repeat(auto-fill,minmax(min(100%,280px),1fr))' : 'minmax(0,1fr)',
+      showThumbs: (this.props.showThumbs ?? true) && layout === 'grid',
+      index: [
+        { no: '01', name: 'Notes', ko: '따라 하며 정리한 노트', count: notesAll.length, href: '#notes', color: '#1E4BD7', fg: '#FDFAF7' },
+        { no: '02', name: 'Dialogues', ko: '에이전트와 묻고 답한 기록', count: dlgAll.length, href: '#dialogues', color: '#D71E1E', fg: '#FDFAF7' },
+        { no: '03', name: 'Skills', ko: '꺼내 쓰는 스킬 보관함', count: SKILLS.length, href: '#skills', color: '#FFE927', fg: '#141414' },
+      ],
+      notes, dialogues, skills, steps: STEPS,
+      notesEmpty: notes.length === 0, dialoguesEmpty: dialogues.length === 0, skillsEmpty: skills.length === 0,
+      skillCols: this.state.narrow ? 'minmax(0,1fr)' : '72px minmax(0,1.2fr) minmax(0,2fr) 110px 96px',
+      skillHeadDisplay: this.state.narrow ? 'none' : 'grid',
+      isOpen: !!selRaw, sel, close: () => this.setState({ openId: null }),
+    };
+  }
+}
+</script>
+</body>
+</html>
